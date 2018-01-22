@@ -5,7 +5,8 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import * as DatabaseAPI from '../Database.js';
 
 const Deck = styled.View`
-    padding: 10px 0;
+    padding: 30px 0;
+    border-bottom-width: 1;
 `;
 
 const DeckText = styled.Text`
@@ -13,9 +14,10 @@ const DeckText = styled.Text`
     text-align: center;
 `;
 
-const TabText = styled.Text`
-    font-size: 18px;
+const NumCards = styled.Text`
+    font-size: 22px;
     text-align: center;
+    color: gray;
 `;
 
 
@@ -41,16 +43,14 @@ export default class DecksView extends React.Component {
 
         return (
             <View>
-                <TabText>Pick a deck to get started:</TabText>
-
                 {_.map(this.state.decks, (deck) => {
                     return (
                         <Deck key={deck.title}>
-                            <DeckText>{deck.title}</DeckText>
                             <TouchableOpacity
                                 onPress={() => navigation.navigate('Deck', { test: 'hellos' })}
                             >
-                                <Text style={styles.startButton}> Start! </Text>
+                                <DeckText>{deck.title}</DeckText>
+                                <NumCards>{_.size(deck.questions)} cards</NumCards>
                             </TouchableOpacity>
                         </Deck>
                     );
@@ -59,9 +59,3 @@ export default class DecksView extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    startButton: {
-        textAlign: 'center',
-    },
-});

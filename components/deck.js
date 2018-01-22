@@ -31,9 +31,16 @@ export default class Deck extends React.Component {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Quiz', { deck: 'my deck id' })}
                 >
-                    <Text>Start!</Text>
+                    <Text style={styles.startButton}> Start! </Text>
+
                 </TouchableOpacity>
             </TabView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    startButton: {
+        textAlign: 'center',
+    },
+});
