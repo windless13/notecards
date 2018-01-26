@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import _ from 'lodash';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import * as DatabaseAPI from '../Database.js';
 
 const Deck = styled.View`
@@ -20,8 +20,6 @@ const NumCards = styled.Text`
     color: gray;
 `;
 
-
-
 export default class DecksView extends React.Component {
     constructor(props) {
         super(props);
@@ -32,29 +30,34 @@ export default class DecksView extends React.Component {
     }
 
     componentDidMount() {
-        DatabaseAPI.getDecks()
-            .then((decks) => {
-                this.setState({ decks });
-            });
+
     }
 
     render() {
+        DatabaseAPI.getDecks()
+            .then((decks) => {
+                this.setState({ decks: _.values(decks) });
+            });
+
         const { navigation } = this.props;
 
         return (
             <View>
-                {_.map(this.state.decks, (deck) => {
-                    return (
-                        <Deck key={deck.title}>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('Deck', { test: 'hellos' })}
-                            >
-                                <DeckText>{deck.title}</DeckText>
-                                <NumCards>{_.size(deck.questions)} cards</NumCards>
-                            </TouchableOpacity>
-                        </Deck>
-                    );
-                })}
+                <FlatList
+                    data={this.state.decks}
+                    renderItem={({item}) => {
+                        return (
+                            <Deck key={item.title}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('Deck', { id: 'particular deck' })}
+                                >
+                                    <DeckText>{item.title}</DeckText>
+                                    <NumCards>{_.size(item.questions)} NumCards</NumCards>
+                                </TouchableOpacity>
+                            </Deck>
+                        );
+                    }}
+                />
             </View>
         );
     }

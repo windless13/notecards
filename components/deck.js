@@ -21,12 +21,12 @@ export default class Deck extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { test } = navigation.state.params;
+        const { id } = navigation.state.params;
 
         return (
             <TabView>
                 <TabText>
-                    This is a deck view {test}
+                    This is a deck view for id: {id}
                 </TabText>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Quiz', { deck: 'my deck id' })}

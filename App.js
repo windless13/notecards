@@ -42,7 +42,8 @@ const Tabs = TabNavigator({
                 height: 3
             },
             shadowRadius: 6,
-            shadowOpacity: 1
+            shadowOpacity: 1,
+            zIndex: 10,
         }
     }
 });
