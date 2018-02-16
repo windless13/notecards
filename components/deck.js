@@ -49,6 +49,7 @@ export default class Deck extends React.Component {
 
         this.state = {
             numCards: 0,
+            deck: null,
         };
     }
 
@@ -60,10 +61,11 @@ export default class Deck extends React.Component {
             .then((deck) => {
                 this.setState({
                     numCards: _.size(deck.questions),
+                    deck,
                 });
             });
 
-        const { numCards } = this.state;
+        const { numCards, deck } = this.state;
 
         return (
             <Container>
@@ -83,7 +85,7 @@ export default class Deck extends React.Component {
                             inverse
                             disabled={numCards <= 0}
                             style={styles.button}
-                            onPress={() => navigation.navigate('Quiz', { id: cardId })}
+                            onPress={() => navigation.navigate('Quiz', { deck })}
                         >
                             <ButtonText inverse> Start Quiz </ButtonText>
                         </StyledButton>

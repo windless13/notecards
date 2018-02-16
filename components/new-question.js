@@ -4,10 +4,27 @@ import _ from 'lodash';
 import { StyleSheet, TextInput, View, Button } from 'react-native';
 import * as DatabaseAPI from '../Database.js';
 
+const Wrapper = styled.View`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+`;
+
 const SubmitWrapper = styled.View`
     padding-vertical: 20px;
     flex-direction: row;
     justify-content: center;
+`;
+
+const ErrorWrapper = styled.View`
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const ErrorMessage = styled.Text`
+    color: red;
+    font-size: 18px;
 `;
 
 const Submit = styled.TouchableOpacity`
@@ -36,6 +53,7 @@ export default class NewQuestion extends React.Component {
         this.state = {
             question: '',
             answer: '',
+            error: '',
         };
 
         this.submitQuestion = _.bind(this.submitQuestion, this);
@@ -47,13 +65,26 @@ export default class NewQuestion extends React.Component {
             answer: this.state.answer,
         };
 
-        DatabaseAPI.addCardToDeck(this.deckId, card);
-        this.props.navigation.navigate('Deck', { id: this.deckId });
+        if (_.isEmpty(this.state.question)) {
+            this.setState({
+                error: 'Please include a question.',
+            });
+        } else if (_.isEmpty(this.state.answer)) {
+            this.setState({
+                error: 'Please include an answer.',
+            });
+        } else {
+            this.setState({
+                error: ''
+            });
+            DatabaseAPI.addCardToDeck(this.deckId, card);
+            this.props.navigation.navigate('Deck', { id: this.deckId });
+        }
     }
 
     render() {
         return (
-            <View>
+            <Wrapper>
                 <InputContainer>
                     <TextInput
                         style={styles.input}
@@ -78,7 +109,12 @@ export default class NewQuestion extends React.Component {
                         <SubmitText>Submit</SubmitText>
                     </Submit>
                 </SubmitWrapper>
-            </View>
+                <ErrorWrapper>
+                    <ErrorMessage>
+                        {this.state.error}
+                    </ErrorMessage>
+                </ErrorWrapper>
+            </Wrapper>
         );
 
     }
