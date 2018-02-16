@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import _ from 'lodash';
 import { StyleSheet, TextInput, View, Button } from 'react-native';
+import * as DatabaseAPI from '../Database.js';
 
 const SubmitWrapper = styled.View`
     padding-vertical: 20px;
@@ -29,10 +31,24 @@ export default class NewQuestion extends React.Component {
     constructor(props) {
         super(props);
 
+        const { id } = props.navigation.state.params;
+        this.deckId = id;
         this.state = {
             question: '',
             answer: '',
         };
+
+        this.submitQuestion = _.bind(this.submitQuestion, this);
+    }
+
+    submitQuestion() {
+        const card = {
+            question: this.state.question,
+            answer: this.state.answer,
+        };
+
+        DatabaseAPI.addCardToDeck(this.deckId, card);
+        this.props.navigation.navigate('Deck', { id: this.deckId });
     }
 
     render() {
@@ -50,12 +66,15 @@ export default class NewQuestion extends React.Component {
                     <TextInput
                         style={styles.input}
                         onChangeText={(answer) => this.setState({ answer })}
-                        value={this.state.questio}
+                        value={this.state.answer}
                         placeholder="Answer"
                     />
                 </InputContainer>
                 <SubmitWrapper>
-                    <Submit style={styles.button}>
+                    <Submit
+                        style={styles.button}
+                        onPress={this.submitQuestion}
+                    >
                         <SubmitText>Submit</SubmitText>
                     </Submit>
                 </SubmitWrapper>

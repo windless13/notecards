@@ -44,49 +44,51 @@ const ButtonText = styled.Text`
 `;
 
 export default class Deck extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            decks: {},
+            numCards: 0,
         };
-
-        DatabaseAPI.getDecks()
-            .then((decks) => {
-                this.setState({decks});
-            });
     }
-
 
     render() {
         const { navigation } = this.props;
-        const { id } = navigation.state.params;
-        const deck = this.state.decks[id];
+        const { id: cardId } = navigation.state.params;
+
+        DatabaseAPI.getDeck(cardId)
+            .then((deck) => {
+                this.setState({
+                    numCards: _.size(deck.questions),
+                });
+            });
+
+        const { numCards } = this.state;
 
         return (
             <Container>
-                {deck && <View>
+                <View>
                     <View style={styles.header}>
-                        <Title>{deck.title}</Title>
-                        <SubTitle>{_.size(deck.questions)} cards</SubTitle>
+                        <Title>{cardId}</Title>
+                        <SubTitle>{numCards} cards</SubTitle>
                     </View>
                     <ButtonWrapper>
                         <StyledButton
                             style={styles.button}
-                            onPress={() => navigation.navigate('NewQuestion', { id: deck.id })}
+                            onPress={() => navigation.navigate('NewQuestion', { id: cardId })}
                         >
                             <ButtonText> Add Card </ButtonText>
                         </StyledButton>
                         <StyledButton
                             inverse
-                            disabled={_.size(deck.questions) <= 0}
+                            disabled={numCards <= 0}
                             style={styles.button}
-                            onPress={() => navigation.navigate('Quiz', { id: deck.id })}
+                            onPress={() => navigation.navigate('Quiz', { id: cardId })}
                         >
                             <ButtonText inverse> Start Quiz </ButtonText>
                         </StyledButton>
                     </ButtonWrapper>
-                </View>}
+                </View>
             </Container>
         );
     }
