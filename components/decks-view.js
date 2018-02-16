@@ -49,7 +49,7 @@ export default class DecksView extends React.Component {
                         return (
                             <Deck key={item.title}>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('Deck', { id: 'particular deck' })}
+                                    onPress={() => navigation.navigate('Deck', { id: item.title })}
                                 >
                                     <DeckText>{item.title}</DeckText>
                                     <NumCards>{_.size(item.questions)} NumCards</NumCards>
@@ -57,6 +57,7 @@ export default class DecksView extends React.Component {
                             </Deck>
                         );
                     }}
+                    keyExtractor={(item, index) => index}
                 />
             </View>
         );

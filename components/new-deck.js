@@ -92,5 +92,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         textAlign: 'center',
-        fontSize: 28,    },
+        fontSize: 28,
+    },
 });
