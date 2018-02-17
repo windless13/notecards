@@ -94,10 +94,10 @@ export default class Deck extends React.Component {
     }
 
     advanceQuestion(isCorrect) {
-        this.setState((prevState => ({
+        this.setState(prevState => ({
             current: prevState.current + 1,
             totalCorrect: isCorrect ? (prevState.totalCorrect + 1) : prevState.totalCorrect,
-        })));
+        }));
     }
 
     render() {
@@ -119,6 +119,23 @@ export default class Deck extends React.Component {
                                 : question
                             }
                         </Body>
+                        <Text
+                            style={{
+                                textAlign: 'center',
+                                fontSize: '16px',
+                                color: 'red',
+                            }}
+                            onPress={() => {
+                                this.setState(prevState => ({
+                                    answerShown: !prevState.answerShown,
+                                }));
+                            }}
+                        >
+                            { answerShown
+                                ? 'Question'
+                                : 'Answer'
+                            }
+                        </Text>
                     </Wrapper>
                     <Buttons>
                         <StyledButton
